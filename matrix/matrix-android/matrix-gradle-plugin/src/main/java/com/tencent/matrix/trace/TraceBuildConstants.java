@@ -34,10 +34,26 @@ public class TraceBuildConstants {
     public final static String MATRIX_TRACE_APPLICATION_CLASS = "android/app/Application";
     public final static String MATRIX_TRACE_METHOD_BEAT_CLASS = "com/tencent/matrix/trace/core/AppMethodBeat";
     public final static String MATRIX_TRACE_ON_WINDOW_FOCUS_METHOD_ARGS = "(Z)V";
-    public static final String[] UN_TRACE_CLASS = {"R.class", "R$", "Manifest", "BuildConfig"};
+    public static final String[] UN_TRACE_CLASS = {"R.class", "R$", "Manifest", "BuildConfig", "META-INF", "module-info"};
+
     public final static String DEFAULT_BLOCK_TRACE =
                     "[package]\n"
                     + "-keeppackage android/\n"
+                    + "-keeppackage facebook\n"
+                    + "-keeppackage com/squareup\n"
+                    + "-keeppackage androidx\n"
+                    + "-keeppackage com/google\n"
+                    + "-keeppackage android\n"
+                    + "-keeppackage kotlin\n"
+                    + "-keeppackage org/apache/commons\n"
+                    + "-keeppackage org/alibaba\n"
+                    + "-keeppackage okhttp3\n"
+                    + "-keeppackage org\n"
+                    + "-keeppackage net\n"
+                    + "-keeppackage java\n"
+                    + "-keeppackage com/android\n"
+                    + "-keeppackage com/facebook\n"
+                    + "-keeppackage com/tencent/mm\n"
                     + "-keeppackage com/tencent/matrix/\n";
 
     private static final int METHOD_ID_MAX = 0xFFFFF;
