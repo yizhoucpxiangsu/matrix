@@ -24,7 +24,8 @@ enum class AGPVersion(
     AGP_3_6_0("3.6.0"),
     AGP_4_0_0("4.0.0"),
     AGP_4_1_0("4.1.0"),
-    AGP_7_0_0("7.0.0")
+    AGP_7_0_0("7.0.0"),
+    AGP_7_2_2("7.2.2"),
 }
 
 class VersionsCompat {
