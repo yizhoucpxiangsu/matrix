@@ -33,7 +33,6 @@ import com.tencent.matrix.util.MatrixHandlerThread;
 import com.tencent.matrix.util.MatrixLog;
 import com.tencent.matrix.util.ReflectUtils;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -169,7 +168,7 @@ public class LooperMonitor implements MessageQueue.IdleHandler {
 
     @Deprecated
     private final HashSet<LooperDispatchListener> oldListeners = new HashSet<>();
-    private final Map<ILooperListener, DispatchListenerWrapper> listeners = new HashMap<>();
+    private final Map<ILooperListener, DispatchListenerWrapper> listeners = new ConcurrentHashMap<>();
     private LooperPrinter printer;
     private Looper looper;
     private static final long CHECK_TIME = 60 * 1000L;
