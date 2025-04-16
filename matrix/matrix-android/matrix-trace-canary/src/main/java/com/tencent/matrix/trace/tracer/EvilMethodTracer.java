@@ -90,7 +90,8 @@ public class EvilMethodTracer extends Tracer implements ILooperListener {
             if (dispatchCost >= evilThresholdMs) {
                 long[] data = AppMethodBeat.getInstance().copyData(indexRecord);
                 String scene = AppActiveMatrixDelegate.INSTANCE.getVisibleScene();
-                MatrixHandlerThread.getDefaultHandler().post(new AnalyseTask(isForeground(), scene, data, dispatchCost, endNs));
+                long endMs = endNs / Constants.TIME_MILLIS_TO_NANO;
+                MatrixHandlerThread.getDefaultHandler().post(new AnalyseTask(isForeground(), scene, data, dispatchCost, endMs));
             }
         } finally {
             indexRecord.release();
