@@ -87,12 +87,12 @@ public class TracePlugin extends Plugin {
             @Override
             public void run() {
 
-                if (sdkInt < Build.VERSION_CODES.N && willUiThreadMonitorRunning(traceConfig)) {
+                if (willUiThreadMonitorRunning(traceConfig)) {
                     if (!UIThreadMonitor.getMonitor().isInit()) {
                         try {
                             UIThreadMonitor.getMonitor().init(traceConfig);
-                        } catch (java.lang.RuntimeException e) {
-                            MatrixLog.e(TAG, "[start] RuntimeException:%s", e);
+                        } catch (Exception e) {
+                            MatrixLog.e(TAG, "[start] Exception:%s", e);
                             return;
                         }
                     }
