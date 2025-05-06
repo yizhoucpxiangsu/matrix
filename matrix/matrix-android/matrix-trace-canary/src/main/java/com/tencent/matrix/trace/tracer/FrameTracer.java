@@ -448,8 +448,8 @@ public class FrameTracer extends Tracer implements Application.ActivityLifecycle
                 }
                 listener.onFrameMetricsAvailable(lastScene, durations, dropLevel, dropSum,
                         dropCount, this.refreshRate, Constants.TIME_SECOND_TO_NANO / totalDuration);
+                reset();
             }
-            reset();
         }
 
         private void collect(int droppedFrames) {
