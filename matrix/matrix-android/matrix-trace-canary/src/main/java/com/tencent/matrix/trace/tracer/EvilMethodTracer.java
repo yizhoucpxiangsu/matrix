@@ -157,6 +157,22 @@ public class EvilMethodTracer extends Tracer implements ILooperListener {
 
             // report
             try {
+                long totalMethodItemCost = 0;
+                long reportLimit = (long) (stackCost * Constants.FILTER_STACK_KEY_PATENT_PERCENT);
+                for (MethodItem methodItem : stack) {
+                    if (methodItem.depth == 0) {
+                        continue;
+                    }
+                    totalMethodItemCost += methodItem.durTime;
+                    if (totalMethodItemCost > reportLimit) {
+                        break;
+                    }
+                }
+                if (totalMethodItemCost < reportLimit) {
+                    MatrixLog.w(TAG, "Preparing to report a EvilMethod, but totalMethodItemCost(" + totalMethodItemCost + ") < reportLimit(" + reportLimit + ")");
+                    return;
+                }
+
                 TracePlugin plugin = Matrix.with().getPluginByClass(TracePlugin.class);
                 if (null == plugin) {
                     return;
