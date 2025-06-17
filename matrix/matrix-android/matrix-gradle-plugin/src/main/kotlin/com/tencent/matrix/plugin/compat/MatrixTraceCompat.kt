@@ -46,7 +46,7 @@ class MatrixTraceCompat : ITraceSwitchListener {
 
     fun inject(appExtension: AppExtension, project: Project, extension: MatrixTraceExtension) {
         when {
-            VersionsCompat.lessThan(AGPVersion.AGP_3_6_0) ->
+            VersionsCompat.lessThan(AGPVersion.AGP_4_0_0) ->
                 legacyInject(appExtension, project, extension)
             VersionsCompat.greatThanOrEqual(AGPVersion.AGP_4_0_0) -> {
                 if (project.extensions.extraProperties.has(LEGACY_FLAG) &&
