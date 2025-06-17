@@ -17,6 +17,7 @@
 package com.tencent.matrix.trace.tracer;
 
 import android.os.Process;
+import android.util.SparseArray;
 
 import com.tencent.matrix.AppActiveMatrixDelegate;
 import com.tencent.matrix.Matrix;
@@ -161,20 +162,31 @@ public class EvilMethodTracer extends Tracer implements ILooperListener {
                     return;
                 }
 
-                long totalMethodItemCost = 0;
-                long reportLimit = (long) (stackCost * Constants.FILTER_STACK_KEY_PATENT_PERCENT);
+                SparseArray<Long> depthCostMap = new SparseArray<>();
+                int maxDepth = 0;
+
                 for (MethodItem methodItem : stack) {
-                    if (methodItem.depth == 0) {
-                        continue;
+                    long prev = depthCostMap.get(methodItem.depth, 0L);
+                    depthCostMap.put(methodItem.depth, prev + methodItem.durTime);
+                    if (methodItem.depth > maxDepth) {
+                        maxDepth = methodItem.depth;
                     }
-                    totalMethodItemCost += methodItem.durTime;
-                    if (totalMethodItemCost > reportLimit) {
+                    if (maxDepth >= 5) {
                         break;
                     }
                 }
-                if (totalMethodItemCost < reportLimit) {
-                    MatrixLog.w(TAG, "Preparing to report a EvilMethod, but totalMethodItemCost(" + totalMethodItemCost + ") < reportLimit(" + reportLimit + ")");
-                    return;
+
+                if (maxDepth <= 5) {
+                    for (int d = 0; d < maxDepth; d++) {
+                        long parentCost = depthCostMap.get(d, 0L);
+                        long childCost = depthCostMap.get(d + 1, 0L);
+
+                        if (parentCost > 0 && childCost < parentCost * Constants.FILTER_STACK_KEY_PATENT_PERCENT) {
+                            MatrixLog.w(TAG, "Filtered by hierarchy cost: depth " + (d + 1) + " cost " + childCost +
+                                    " < 80% of depth " + d + " cost " + parentCost);
+                            return;
+                        }
+                    }
                 }
 
                 TracePlugin plugin = Matrix.with().getPluginByClass(TracePlugin.class);
