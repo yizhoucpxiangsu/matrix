@@ -166,26 +166,24 @@ public class EvilMethodTracer extends Tracer implements ILooperListener {
                 int maxDepth = 0;
 
                 for (MethodItem methodItem : stack) {
+                    if (methodItem.depth > 4) {
+                        break;
+                    }
                     long prev = depthCostMap.get(methodItem.depth, 0L);
                     depthCostMap.put(methodItem.depth, prev + methodItem.durTime);
                     if (methodItem.depth > maxDepth) {
                         maxDepth = methodItem.depth;
                     }
-                    if (maxDepth >= 5) {
-                        break;
-                    }
                 }
 
-                if (maxDepth <= 5) {
-                    for (int d = 0; d < maxDepth; d++) {
-                        long parentCost = depthCostMap.get(d, 0L);
-                        long childCost = depthCostMap.get(d + 1, 0L);
+                for (int d = 0; d < maxDepth; d++) {
+                    long parentCost = depthCostMap.get(d, 0L);
+                    long childCost = depthCostMap.get(d + 1, 0L);
 
-                        if (parentCost > 0 && childCost < parentCost * Constants.FILTER_STACK_KEY_PATENT_PERCENT) {
-                            MatrixLog.w(TAG, "Filtered by hierarchy cost: depth " + (d + 1) + " cost " + childCost +
-                                    " < 80% of depth " + d + " cost " + parentCost);
-                            return;
-                        }
+                    if (parentCost > 0 && childCost < parentCost * Constants.FILTER_STACK_KEY_PATENT_PERCENT) {
+                        MatrixLog.w(TAG, "Filtered by hierarchy cost: depth " + (d + 1) + " cost " + childCost +
+                                " < 80% of depth " + d + " cost " + parentCost);
+                        return;
                     }
                 }
 
