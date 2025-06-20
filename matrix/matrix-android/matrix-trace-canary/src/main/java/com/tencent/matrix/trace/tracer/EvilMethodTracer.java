@@ -88,7 +88,7 @@ public class EvilMethodTracer extends Tracer implements ILooperListener {
     public void onDispatchEnd(String log, long beginNs, long endNs) {
         long dispatchCost = (endNs - beginNs) / Constants.TIME_MILLIS_TO_NANO;
         try {
-            if (dispatchCost >= evilThresholdMs) {
+            if (dispatchCost >= evilThresholdMs && dispatchCost <= Constants.DEFAULT_MAX_EVIL_METHOD_THRESHOLD_MS) {
                 long[] data = AppMethodBeat.getInstance().copyData(indexRecord);
                 String scene = AppActiveMatrixDelegate.INSTANCE.getVisibleScene();
                 long endMs = endNs / Constants.TIME_MILLIS_TO_NANO;
