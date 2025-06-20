@@ -166,8 +166,8 @@ public class EvilMethodTracer extends Tracer implements ILooperListener {
                 int maxDepth = 0;
 
                 for (MethodItem methodItem : stack) {
-                    if (methodItem.depth > 4) {
-                        break;
+                    if (methodItem.depth > 1) {
+                        continue;
                     }
                     long prev = depthCostMap.get(methodItem.depth, 0L);
                     depthCostMap.put(methodItem.depth, prev + methodItem.durTime);
